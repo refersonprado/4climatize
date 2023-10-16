@@ -1,28 +1,32 @@
 <?php
+session_start();
 
+if (isset($_POST['submit']) && !empty($_POST['email']) && !empty($_POST['password'])) {
+    include_once('config.php');
 
-if(isset($_POST['submit']) && !empty($_POST['email']) && !empty($_POST['password'])) {
- 
-  include_once('config.php');
+    $loginUser = $_POST['email'];
+    $loginPassword = $_POST['password'];
 
-  $loginUser = $_POST['email'];
-  $loginPassword = $_POST['password'];
+    $sql = "SELECT * FROM users WHERE email = '$loginUser'";
+    $result = $connection->query($sql);
 
-  $sql = "SELECT * FROM users WHERE email = '$loginUser' and encrypted_password = '$loginPassword'";
+    if ($result->num_rows < 1) {
+        header('Location: login.php');
+    } else {
+        $user = $result->fetch_assoc();
+        $hashedPassword = $user['encrypted_password'];
 
-  $result = $connection -> query($sql);
-  print_r($result);
-  print_r($result);
+        if (password_verify($loginPassword, $hashedPassword)) {
+            $_SESSION['email'] = $loginUser;
+            $_SESSION['password'] = $loginPassword;
 
-  if(mysqli_num_rows($result) < 1 ) {
-    header('Location: login.php');
-  }
-
-  else {
-    header('Location: home.php');
-  }
-}
-else {
-
+            header('Location: home.php');
+        } else {
+            unset($_SESSION['email']);
+            unset($_SESSION['password']);
+            header('Location: login.php');
+        }
+    }
+} else {
 }
 ?>

@@ -12,28 +12,23 @@ if (isset($_POST['submit'])) {
     $macCheckResult = mysqli_query($connection, $macCheckQuery);
 
     if (mysqli_num_rows($macCheckResult) > 0) {
-        // Criptografe a senha
         $hashedPassword = password_hash($passwordUser, PASSWORD_DEFAULT);
 
-        // Obtenha a data atual
         $currentDate = date('Y-m-d H:i:s');
 
-        // Inserir na tabela cad_usuarios
         $insertQuery1 = "INSERT INTO cad_usuarios (nome, login, created_at) 
                         VALUES ('$nameUser', '$emailUser', '$currentDate')";
 
         if (mysqli_query($connection, $insertQuery1)) {
-            // Inserir na tabela users
             $insertQuery2 = "INSERT INTO users (email, encrypted_password, created_at)
                             VALUES ('$emailUser', '$hashedPassword', '$currentDate')";
 
             if (mysqli_query($connection, $insertQuery2)) {
-                // Inserir na tabela cad_clientes
                 $insertQuery3 = "INSERT INTO cad_clientes (nome, telefone, created_at)
                                 VALUES ('$nameUser', '$phoneUser', '$currentDate')";
 
                 if (mysqli_query($connection, $insertQuery3)) {
-                    echo "Cadastro realizado com sucesso!";
+                    header('Location: home.php');
                 } else {
                     echo "Erro ao cadastrar o cliente: " . mysqli_error($connection);
                 }
