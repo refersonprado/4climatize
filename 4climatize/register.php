@@ -7,42 +7,66 @@ if (isset($_POST['submit'])) {
     $phoneUser = $_POST['phone'];
     $mac = $_POST['macProduct'];
     $passwordUser = $_POST['password'];
+    $confirmPassword = $_POST['confirm_password'];
 
-    $macCheckQuery = "SELECT id FROM status_sensors WHERE id_equipamento = '$mac'";
-    $macCheckResult = mysqli_query($connection, $macCheckQuery);
+    // Verificar se as senhas coincidem
+    if ($passwordUser != $confirmPassword) {
+        echo "As senhas não coincidem.";
+    } else {
+        // Iniciar a transação
+        mysqli_autocommit($connection, false);
 
-    if (mysqli_num_rows($macCheckResult) > 0) {
-        $hashedPassword = password_hash($passwordUser, PASSWORD_DEFAULT);
+        $macCheckQuery = "SELECT id FROM status_sensors WHERE id_equipamento = '$mac'";
+        $macCheckResult = mysqli_query($connection, $macCheckQuery);
 
-        $currentDate = date('Y-m-d H:i:s');
+        if (mysqli_num_rows($macCheckResult) > 0) {
+            // Verifique se o e-mail já existe na tabela de usuários
+            $emailCheckQuery = "SELECT id FROM users WHERE email = '$emailUser'";
+            $emailCheckResult = mysqli_query($connection, $emailCheckQuery);
 
-        $insertQuery1 = "INSERT INTO cad_usuarios (nome, login, created_at) 
-                        VALUES ('$nameUser', '$emailUser', '$currentDate')";
+            // Verifique se o nome de usuário (login) já existe na tabela cad_usuarios
+            $nameCheckQuery = "SELECT id FROM cad_usuarios WHERE login = '$emailUser'";
+            $nameCheckResult = mysqli_query($connection, $nameCheckQuery);
 
-        if (mysqli_query($connection, $insertQuery1)) {
-            $insertQuery2 = "INSERT INTO users (email, encrypted_password, created_at)
-                            VALUES ('$emailUser', '$hashedPassword', '$currentDate')";
+            if (mysqli_num_rows($emailCheckResult) > 0 || mysqli_num_rows($nameCheckResult) > 0) {
+                echo "E-mail ou nome de usuário já estão em uso.";
+            } else {
+                $hashedPassword = password_hash($passwordUser, PASSWORD_DEFAULT);
+                $currentDate = date('Y-m-d H:i:s');
 
-            if (mysqli_query($connection, $insertQuery2)) {
+                $insertQuery1 = "INSERT INTO cad_usuarios (nome, login, created_at) 
+                                VALUES ('$nameUser', '$emailUser', '$currentDate')";
+
+                $insertQuery2 = "INSERT INTO users (email, encrypted_password, created_at)
+                                VALUES ('$emailUser', '$hashedPassword', '$currentDate')";
+
                 $insertQuery3 = "INSERT INTO cad_clientes (nome, telefone, created_at)
                                 VALUES ('$nameUser', '$phoneUser', '$currentDate')";
 
-                if (mysqli_query($connection, $insertQuery3)) {
+                if (mysqli_query($connection, $insertQuery1) && mysqli_query($connection, $insertQuery2) && mysqli_query($connection, $insertQuery3)) {
+                    // Inicie uma sessão e defina a variável de sessão
+                    session_start();
+                    $_SESSION['email'] = $emailUser; // Defina a variável de sessão com o e-mail do usuário
+
+                    // Redirecione o usuário para a página de início
                     header('Location: home.php');
                 } else {
-                    echo "Erro ao cadastrar o cliente: " . mysqli_error($connection);
+                    // Rollback a transação se algo der errado
+                    mysqli_rollback($connection);
+                    echo "Erro ao cadastrar: " . mysqli_error($connection);
                 }
-            } else {
-                echo "Erro ao cadastrar o usuário: " . mysqli_error($connection);
             }
         } else {
-            echo "Erro ao cadastrar o cliente: " . mysqli_error($connection);
+            echo "MAC não encontrado na base de dados.";
         }
-    } else {
-        echo "MAC não encontrado na base de dados.";
+
+        // Restaurar o modo de autocommit
+        mysqli_autocommit($connection, true);
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="pt-br">
@@ -79,6 +103,11 @@ if (isset($_POST['submit'])) {
         <p>
             <label for="password" id="password">Senha</label>
             <input type="password" id="password" name="password" required>
+        </p> 
+        
+        <p>
+            <label for="confirm_password" id="confirm_password">Confirmar Senha</label>
+            <input type="password" id="confirm_password" name="confirm_password" required>
         </p>
 
         <input type="submit" name="submit">
