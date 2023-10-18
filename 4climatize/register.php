@@ -75,43 +75,57 @@ if (isset($_POST['submit'])) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro - 4Climatize</title>
+    <link rel="stylesheet" href="./style/register.css">
 </head>
 
 <body>
-    <form action="register.php" method="POST">
-        <p>
-            <label for="name" id="name">Nome</label>
-            <input type="name" id="name" name="name" required>
-        </p>
+    <div class="content">
 
 
-        <p>
-            <label for="email" id="email">Email</label>
-            <input type="email" id="email" name="email" required>
-        </p>
+    <form class="form-registro" action="register.php" method="POST">
+        <div class="fields">
 
-        <p>
-            <label for="phone" id="phone">Telefone</label>
-            <input type="number" id="phone" name="phone" required>
-        </p>
-
-        <p>
-            <label for="macProduct" id="macProduct">Mac do Sensor</label>
-            <input type="text" id="macProduct" name="macProduct" required>
-        </p>
-       
-        <p>
-            <label for="password" id="password">Senha</label>
-            <input type="password" id="password" name="password" required>
-        </p> 
-        
-        <p>
-            <label for="confirm_password" id="confirm_password">Confirmar Senha</label>
-            <input type="password" id="confirm_password" name="confirm_password" required>
-        </p>
-
-        <input type="submit" name="submit">
+            <p class="field campo-nome">
+                <label for="name" id="name">Nome</label>
+                <input type="name" id="name" name="name" required>
+            </p>
+    
+    
+            <p class="field campo-email">
+                <label for="email" id="email">Email</label>
+                <input type="email" id="email" name="email" required>
+            </p>
+    
+            <p class="field campo-phone">
+                <label for="phone" id="phone">Telefone</label>
+                <input type="number" id="phone" name="phone" required>
+            </p>
+    
+            <p class="field campo-mac">
+                <label for="macProduct" id="macProduct">Mac do Sensor</label>
+                <input type="text" id="macProduct" name="macProduct" required>
+            </p>
+           
+            <p class="field campo-senha">
+                <label for="password" id="password">Senha</label>
+                <input type="password" id="password" name="password" required>
+            </p> 
+            
+            <p class="field campo-confirmaSenha">
+                <label for="confirm_password" id="confirm_password">Confirmar Senha</label>
+                <input type="password" id="confirm_password" name="confirm_password" required>
+            </p>
+    
+            <input class='submit-button' type="submit" name="submit">
+        </div>
+        <div class="links">
+        <a href="#">Esqueceu a senha?</a>
+        <a href="#">Cadastre-se</a>
+      </div>
     </form>
+    <div class="section-img">
+    </div>
+    
 </body>
 
 </html>
