@@ -1,0 +1,122 @@
+@import url("https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,500;0,700;1,400&display=swap");
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-family: "Epilogue", sans-serif;
+}
+
+body {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 80px;
+  background-color: #d6e2ec;
+}
+
+.content {
+  max-width: 800px;
+  width: 100%;
+  background-color: #f8f8f8;
+  height: 100%;
+  max-height: 400px;
+  display: flex;
+  border-radius: 20px;
+  /* -webkit-box-shadow: 0px 0px 40px -15px rgba(0, 0, 0, 0.85);
+    -moz-box-shadow: 0px 0px 40px -15px rgba(0, 0, 0, 0.85);
+    box-shadow: 0px 0px 40px -15px rgba(0, 0, 0, 0.85); */
+}
+
+.form-login {
+  background-color: #fff;
+  width: 50%;
+  padding: 20px 30px;
+  text-align: center;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-login .fields {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.field {
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  text-align: left;
+  width: 100%;
+}
+
+.field input {
+  padding: 10px 5px;
+  width: 100%;
+}
+
+.climatize-logo {
+  width: 150px;
+  text-align: center;
+}
+
+.field input:focus {
+  outline: 0;
+}
+
+.submit-button {
+  background-color: #2e59e9;
+  padding: 10px;
+  color: white;
+  border: none;
+  border-radius: 5px;
+
+  /* -webkit-box-shadow: 0px 0px 30px -11px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 0px 0px 30px -11px rgba(0, 0, 0, 0.75);
+  box-shadow: 0px 0px 30px -11px rgba(0, 0, 0, 0.75); */
+}
+
+.links {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+}
+
+.links a {
+  font-size: 14px;
+}
+
+.section-img {
+  padding: 30px;
+  width: 50%;
+  height: 100%;
+  background-image: url("../img/Mobile-login-bro.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+}
+
+@media screen and (max-width: 768px) {
+  .content {
+    flex-direction: column;
+  }
+  .section-img {
+    display: none;
+  }
+  form.form-login {
+    width: 100%;
+    height: 100%;
+  }
+}
